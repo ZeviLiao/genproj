@@ -11,19 +11,29 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { stylePath: './theme/themeA/css/App.css' };
-    var link = document.getElementById('themeStyle');
-    link.setAttribute('href', './theme/themeA/css/App.css');
+
+    const { cookies } = props;
+    this.state = {
+      themeName: cookies.get('themeName') || 'A'
+    };
+
+    // this.state = { stylePath: './theme/themeA/css/App.css' };
+    // var link = document.getElementById('themeStyle');
+    // link.setAttribute('href', './theme/themeA/css/App.css');
   }
 
   handleThemeNameChange(themeName){
-    this.setState({ stylePath: './theme/theme' + themeName +'/css/App.css'});
+    const { cookies } = this.props;
+    cookies.set('themeName', themeName, { path: '/' });
+    this.setState({ themeName });
   }
 
   render() {
+    let {themeName} = this.state
     if (document.getElementById('themeStyle')) {
       var link = document.getElementById('themeStyle');
-      link.setAttribute('href', this.state.stylePath);
+      let urlStr = `./theme/theme${themeName}/css/App.css`
+      link.setAttribute('href', urlStr);
     }
 
     return (
