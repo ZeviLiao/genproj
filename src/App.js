@@ -4,7 +4,6 @@ import { instanceOf } from 'prop-types';
 import { withCookies, Cookies } from 'react-cookie';
 
 
-
 class App extends Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
@@ -12,23 +11,21 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-
-    const { cookies } = props;
-    this.state = {
-      themeName: cookies.get('themeName') || 'A'
-    };
-    require('./theme/theme' + this.state.themeName + '/css/index.css')
-    require('./theme/theme' + this.state.themeName + '/css/App.css')
+    this.state = { stylePath: './theme/themeA/css/App.css' };
+    var link = document.getElementById('themeStyle');
+    link.setAttribute('href', './theme/themeA/css/App.css');
   }
 
-  handleThemeNameChange = (themeName) =>{
-    const { cookies } = this.props;
-    cookies.set('themeName', themeName, { path: '/' });
-    this.setState({ themeName });
-    window.location.reload();
+  handleThemeNameChange(themeName){
+    this.setState({ stylePath: './theme/theme' + themeName +'/css/App.css'});
   }
 
   render() {
+    if (document.getElementById('themeStyle')) {
+      var link = document.getElementById('themeStyle');
+      link.setAttribute('href', this.state.stylePath);
+    }
+
     return (
       <div className="App">
         <header className="App-header">
